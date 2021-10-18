@@ -23,7 +23,7 @@ class Calculator:
     def get_week_stats(self):  # затраты за неделю
         week_spent = 0
         for i in self.records:
-            days = 7 # чисто для теста, так она тут совсем не нужна
+            days = 7  # чисто для теста, так она тут совсем не нужна
             days = date.today() - i.date
             if 0 <= days.days <= 7:
                 week_spent += abs(i.amount)
