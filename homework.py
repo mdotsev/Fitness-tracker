@@ -40,16 +40,16 @@ class CaloriesCalculator (Calculator):
 
 
 class CashCalculator (Calculator):
+    USD_RATE = 0.014
+    EURO_RATE = 0.0121
+    RUB_RATE = 1
+
     def get_today_cash_remained(self, currency):
-        USD_RATE = 0.014
-        EURO_RATE = 0.0121
-        if currency == 'usd':
-            self.remain = USD_RATE
-        elif currency == 'eur':
-            self.remain = EURO_RATE
-        else:
-            self.remain = 1
-        self.remain *= self.limit - CashCalculator.get_today_stats(self)
+        currencies = {'usd': CashCalculator.USD_RATE,
+                      'euro': CashCalculator.EURO_RATE,
+                      'rub': CashCalculator.RUB_RATE}
+        spent = self.limit - CashCalculator.get_today_stats(self)
+        self.remain = currencies[currency] * spent
         if self.remain > 0:
             return (f'На сегодня осталось {self.remain} {currency}')
         elif self.remain == 0:
@@ -64,7 +64,7 @@ class Record:
     def __init__(self, amount: float,
                  date: Optional[str] = None,
                  comment: str = None) -> None:
-        self.amount = amount
+        self.amount = abs(amount)
         if date is None:
             self.date = dt.datetime.today()
         else:
@@ -91,3 +91,5 @@ print(cal_calculator.get_today_stats())
 print(cal_calculator.get_week_stats())
 print(cal_calculator.get_calories_remained())
 print(cash_calculator.get_today_cash_remained('usd'))
+print(cash_calculator.get_today_cash_remained('euro'))
+print(cash_calculator.get_today_cash_remained('rub'))
