@@ -46,7 +46,7 @@ class CashCalculator (Calculator):
 
     def get_today_cash_remained(self, currency):
         currencies = {'usd': CashCalculator.USD_RATE,
-                      'euro': CashCalculator.EURO_RATE,
+                      'eur': CashCalculator.EURO_RATE,
                       'rub': CashCalculator.RUB_RATE}
         spent = self.limit - CashCalculator.get_today_stats(self)
         self.remain = currencies[currency] * spent
@@ -91,5 +91,5 @@ print(cal_calculator.get_today_stats())
 print(cal_calculator.get_week_stats())
 print(cal_calculator.get_calories_remained())
 print(cash_calculator.get_today_cash_remained('usd'))
-print(cash_calculator.get_today_cash_remained('euro'))
+print(cash_calculator.get_today_cash_remained('eur'))
 print(cash_calculator.get_today_cash_remained('rub'))
