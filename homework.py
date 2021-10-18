@@ -23,6 +23,7 @@ class Calculator:
     def get_week_stats(self):  # затраты за неделю
         week_spent = 0
         for i in self.records:
+            days = 7 # чисто для теста, так она тут совсем не нужна
             days = date.today() - i.date
             if 0 <= days.days <= 7:
                 week_spent += abs(i.amount)
@@ -84,20 +85,3 @@ class Record:
         else:  # перевод даты из str() в dt
             self.date = dt.datetime.strptime(date, '%d.%m.%Y').date()
         self.comment = comment
-
-
-cash_calculator = CashCalculator(1000)
-
-cash_calculator.add_record(Record(amount=300))
-cash_calculator.add_record(Record(amount=400,
-                                  comment='бар в Машин др',
-                                  date='18.10.2021'))
-cash_calculator.add_record(Record(amount=100,
-                                  comment='бар в Пашин др',
-                                  date='18.10.2021'))
-
-print(cash_calculator.get_today_stats())
-print(cash_calculator.get_week_stats())
-print(cash_calculator.get_today_cash_remained('usd'))
-print(cash_calculator.get_today_cash_remained('eur'))
-print(cash_calculator.get_today_cash_remained('rub'))
