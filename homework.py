@@ -24,7 +24,7 @@ class Calculator:
         week_cost = 0
         for i in self.records:
             days = date.today() - i.date
-            if days.days <= 7:
+            if 0 <= days.days <= 7:
                 week_cost += i.amount
         return (week_cost)
 
@@ -83,7 +83,14 @@ cash_calculator.add_record(Record(amount=30000,
                                   date='18.10.2021'))
 cal_calculator.add_record(Record(amount=500,
                                  comment='бар в Танин др',
-                                 date='18.10.2021'))
+                                 date='11.10.2021'))
+cal_calculator.add_record(Record(amount=500,
+                                 comment='бар в Танин др',
+                                 date='12.10.2021'))
+cal_calculator.add_record(Record(amount=500,
+                                 comment='бар в Танин др',
+                                 date='19.10.2021'))
+
 
 print(cash_calculator.get_today_stats())
 print(cash_calculator.get_week_stats())
