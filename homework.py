@@ -16,14 +16,14 @@ class Calculator:
     def get_today_stats(self):
         day_cost = 0
         for i in self.records:
-            if i.dates == date.today():
+            if i.date == date.today():
                 day_cost += i.amount
         return day_cost
 
     def get_week_stats(self):
         week_cost = 0
         for i in self.records:
-            days = date.today() - i.dates
+            days = date.today() - i.date
             if days.days <= 7:
                 week_cost += i.amount
         return (week_cost)
@@ -62,13 +62,13 @@ class CashCalculator (Calculator):
 class Record:
     """Создает запись для калькулятора."""
     def __init__(self, amount: float,
-                 dates: Optional[str] = None,
+                 date: Optional[str] = None,
                  comment: str = None) -> None:
         self.amount = amount
-        if dates is None:
-            self.dates = dt.datetime.today()
+        if date is None:
+            self.date = dt.datetime.today()
         else:
-            self.dates = dt.datetime.strptime(dates, '%d.%m.%Y').date()
+            self.date = dt.datetime.strptime(date, '%d.%m.%Y').date()
         self.comment = comment
 
 
@@ -77,13 +77,13 @@ cal_calculator = CaloriesCalculator(1000)
 
 cash_calculator.add_record(Record(amount=3000,
                                   comment='бар в Танин др',
-                                  dates='08.11.2019'))
+                                  date='08.11.2019'))
 cash_calculator.add_record(Record(amount=30000,
                                   comment='бар в Машин др',
-                                  dates='18.10.2021'))
+                                  date='18.10.2021'))
 cal_calculator.add_record(Record(amount=500,
                                  comment='бар в Танин др',
-                                 dates='18.10.2021'))
+                                 date='18.10.2021'))
 
 print(cash_calculator.get_today_stats())
 print(cash_calculator.get_week_stats())
