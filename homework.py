@@ -67,7 +67,7 @@ class Record:
                  comment: str = None) -> None:
         self.amount = abs(amount)
         if date is None:
-            self.date = dt.datetime.today()
+            self.date = dt.datetime.today().date()
         else:
             self.date = dt.datetime.strptime(date, '%d.%m.%Y').date()
         self.comment = comment
@@ -91,9 +91,7 @@ cal_calculator.add_record(Record(amount=500,
 cal_calculator.add_record(Record(amount=500,
                                  comment='бар в Танин др',
                                  date='18.10.2021'))
-cal_calculator.add_record(Record(amount=500,
-                                 comment='бар в Танин др',
-                                 date='18.10.2021'))
+cal_calculator.add_record(Record(amount=500))
 
 
 print(cash_calculator.get_today_stats())
