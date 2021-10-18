@@ -14,19 +14,19 @@ class Calculator:
         self.records.append(record)
 
     def get_today_stats(self):
-        day_cost = 0
+        day_spent = 0
         for i in self.records:
             if i.date == date.today():
-                day_cost += i.amount
-        return day_cost
+                day_spent += i.amount
+        return day_spent
 
     def get_week_stats(self):
-        week_cost = 0
+        week_spent = 0
         for i in self.records:
             days = date.today() - i.date
             if 0 <= days.days <= 7:
-                week_cost += i.amount
-        return (week_cost)
+                week_spent += i.amount
+        return (week_spent)
 
 
 class CaloriesCalculator (Calculator):
@@ -45,18 +45,19 @@ class CashCalculator (Calculator):
     RUB_RATE = 1
 
     def get_today_cash_remained(self, currency):
-        currencies = {'usd': CashCalculator.USD_RATE,
-                      'eur': CashCalculator.EURO_RATE,
-                      'rub': CashCalculator.RUB_RATE}
+        currencies = {'usd': [CashCalculator.USD_RATE, 'USD'],
+                      'eur': [CashCalculator.EURO_RATE, 'Euro'],
+                      'rub': [CashCalculator.RUB_RATE, 'руб']}
         spent = self.limit - CashCalculator.get_today_stats(self)
-        self.remain = currencies[currency] * spent
+        self.remain = round(currencies[currency][0] * spent, 2)
         if self.remain > 0:
-            return (f'На сегодня осталось {self.remain} {currency}')
+            return ('На сегодня осталось '
+                    f'{self.remain} {currencies[currency][1]}')
         elif self.remain == 0:
             return ('Денег нет, держись')
         else:
             return ('Денег нет, держись: твой долг - '
-                    f'{-self.remain} {currency}')
+                    f'{-self.remain} {currencies[currency][1]}')
 
 
 class Record:
@@ -75,21 +76,24 @@ class Record:
 cash_calculator = CashCalculator(5000)
 cal_calculator = CaloriesCalculator(1000)
 
-cash_calculator.add_record(Record(amount=3000,
+cash_calculator.add_record(Record(amount=30,
                                   comment='бар в Танин др',
                                   date='08.11.2019'))
-cash_calculator.add_record(Record(amount=30000,
+cash_calculator.add_record(Record(amount=300,
+                                  comment='бар в Машин др',
+                                  date='18.10.2021'))
+cash_calculator.add_record(Record(amount=300,
                                   comment='бар в Машин др',
                                   date='18.10.2021'))
 cal_calculator.add_record(Record(amount=500,
                                  comment='бар в Танин др',
-                                 date='11.10.2021'))
+                                 date='18.10.2021'))
 cal_calculator.add_record(Record(amount=500,
                                  comment='бар в Танин др',
-                                 date='12.10.2021'))
+                                 date='18.10.2021'))
 cal_calculator.add_record(Record(amount=500,
                                  comment='бар в Танин др',
-                                 date='19.10.2021'))
+                                 date='18.10.2021'))
 
 
 print(cash_calculator.get_today_stats())
