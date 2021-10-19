@@ -20,8 +20,9 @@ class Calculator:
 
     def get_week_stats(self):  # затраты за неделю
         week = date.today() - dt.timedelta(days=7)
+        today = date.today()
         week_stat = [abs(i.amount) for i in self.records
-                     if date.today() >= i.date >= week]
+                     if today >= i.date >= week]
         return sum(week_stat)
 
 
@@ -72,13 +73,12 @@ class Record:
     """Создает запись для калькулятора."""
     def __init__(self, amount: float,
                  date: Optional[str] = None,
-                 comment: str = None) -> None:
+                 comment: str = None,
+                 date_format: str = '%d.%m.%Y') -> None:
 
         self.amount = amount
         if date is None:  # установка текущей даты при отсутствии 'date'
             self.date = dt.date.today()
         else:  # перевод даты из str() в dt
-            self.date = dt.datetime.strptime(date, '%d.%m.%Y').date()
-        """Если вынести формат даты, не принимает pytest именно,
-        не понимаю, что сделать."""
+            self.date = dt.datetime.strptime(date, date_format).date()
         self.comment = comment
