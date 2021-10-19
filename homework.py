@@ -82,4 +82,3 @@ class Record:
         else:  # перевод даты из str() в dt
             self.date = dt.datetime.strptime(date, self.date_format).date()
         self.comment = comment
-
