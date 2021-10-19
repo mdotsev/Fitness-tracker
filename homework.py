@@ -19,8 +19,8 @@ class Calculator:
         return sum(day_stat)
 
     def get_week_stats(self):  # затраты за неделю
-        week = date.today() - dt.timedelta(days=7)
         today = date.today()
+        week = today - dt.timedelta(days=7)
         week_stat = [abs(i.amount) for i in self.records
                      if today >= i.date >= week]
         return sum(week_stat)
