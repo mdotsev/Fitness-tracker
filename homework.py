@@ -14,24 +14,15 @@ class Calculator:
         self.records.append(record)
 
     def get_today_stats(self):  # затраты за день
-        day_spent = 0
-        for i in self.records:
-            if i.date == date.today():
-                day_spent += abs(i.amount)
-        return day_spent
+        day_stat = [i.amount for i in self.records
+                    if date.today() == i.date]
+        return sum(day_stat)
 
     def get_week_stats(self):  # затраты за неделю
-        week_spent = 0
-        for i in self.records:
-            delta = dt.timedelta(days=7)
-            print('Это только для автотеста...', delta)
-            """Автотест просто не пускал меня + написать days=7 нельзя
-             — не пускает PEP, пришлось создавать этот костыль,
-             свой метод менять не хотел"""
-            days = date.today() - i.date
-            if 0 <= days.days <= 7:
-                week_spent += abs(i.amount)
-        return week_spent
+        week = date.today() - dt.timedelta(days=7)
+        week_stat = [i.amount for i in self.records
+                     if date.today() >= i.date >= week]
+        return sum(week_stat)
 
 
 class CaloriesCalculator (Calculator):
@@ -41,8 +32,7 @@ class CaloriesCalculator (Calculator):
         if self.remain > 0:
             return ('Сегодня можно съесть что-нибудь ещё, но с общей '
                     f'калорийностью не более {self.remain} кКал')
-        else:
-            return ('Хватит есть!')
+        return ('Хватит есть!')
 
 
 class CashCalculator (Calculator):
@@ -61,31 +51,35 @@ class CashCalculator (Calculator):
         }
 
         spent = self.limit - self.get_today_stats()  # потрачено за сегодня
-        rate, name = CURRENCIES[currency]  # задаем значения через кортеж
 
         if spent == 0:
             return ('Денег нет, держись')
         elif currency not in CURRENCIES:
-            return 'Данная валюта не поддерживается'
-
-        remain = round(spent / rate, 2)  # переводим в заданную валюту
+            currs = ', '.join([cur for cur in CURRENCIES])
+            return ('Данная валюта не поддерживается. Вы можете '
+                    f'выбрать одну из трех валют: {currs}')
+        rate, name = CURRENCIES[currency]  # задаем значения через кортеж
+        remain = spent / rate  # переводим в заданную валюту
         if remain > 0:
             return ('На сегодня осталось '
-                    f'{remain} {name}')
+                    f'{abs(remain):.2f} {name}')
         else:
             return ('Денег нет, держись: твой долг - '
-                    f'{abs(remain)} {name}')
+                    f'{abs(remain):.2f} {name}')
 
 
 class Record:
     """Создает запись для калькулятора."""
+    date_format = '%d.%m.%Y'
+
     def __init__(self, amount: float,
-                 date: Optional[str] = None,
+                 date: Optional[date] = None,
                  comment: str = None) -> None:
 
         self.amount = amount
         if date is None:  # установка текущей даты при отсутствии 'date'
-            self.date = dt.datetime.today().date()
+            self.date = dt.date.today()
         else:  # перевод даты из str() в dt
-            self.date = dt.datetime.strptime(date, '%d.%m.%Y').date()
+            self.date = dt.datetime.strptime(date, self.date_format).date()
         self.comment = comment
+
