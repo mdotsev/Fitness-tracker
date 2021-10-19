@@ -14,13 +14,13 @@ class Calculator:
         self.records.append(record)
 
     def get_today_stats(self):  # затраты за день
-        day_stat = [i.amount for i in self.records
+        day_stat = [abs(i.amount) for i in self.records
                     if date.today() == i.date]
         return sum(day_stat)
 
     def get_week_stats(self):  # затраты за неделю
         week = date.today() - dt.timedelta(days=7)
-        week_stat = [i.amount for i in self.records
+        week_stat = [abs(i.amount) for i in self.records
                      if date.today() >= i.date >= week]
         return sum(week_stat)
 
@@ -62,7 +62,7 @@ class CashCalculator (Calculator):
         remain = spent / rate  # переводим в заданную валюту
         if remain > 0:
             return ('На сегодня осталось '
-                    f'{abs(remain):.2f} {name}')
+                    f'{remain:.2f} {name}')
         else:
             return ('Денег нет, держись: твой долг - '
                     f'{abs(remain):.2f} {name}')
@@ -70,15 +70,15 @@ class CashCalculator (Calculator):
 
 class Record:
     """Создает запись для калькулятора."""
-    date_format = '%d.%m.%Y'
-
     def __init__(self, amount: float,
-                 date: Optional[date] = None,
+                 date: Optional[str] = None,
                  comment: str = None) -> None:
 
         self.amount = amount
         if date is None:  # установка текущей даты при отсутствии 'date'
             self.date = dt.date.today()
         else:  # перевод даты из str() в dt
-            self.date = dt.datetime.strptime(date, self.date_format).date()
+            self.date = dt.datetime.strptime(date, '%d.%m.%Y').date()
+        """Если вынести формат даты, не принимает pytest именно,
+        не понимаю, что сделать."""
         self.comment = comment
